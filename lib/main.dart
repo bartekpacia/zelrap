@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zelrap/screens/home_screen.dart';
+import 'package:zelrap/screens/home/home_screen.dart';
 import 'package:zelrap/theme.dart';
 
 void main() {
