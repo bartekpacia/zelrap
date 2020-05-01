@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:zelrap/screens/home/widgets/featured_card.dart';
+import 'package:zelrap/widgets/loading_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -21,10 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
             colors: [
-              Color(0xfffefefe),
-              Color(0xffffffff),
-//              Color(0xff1a1a1a),
-//              Color(0xff000000),
+              Theme.of(context).primaryColor,
+              Theme.of(context).primaryColorDark,
             ],
           ),
         ),
@@ -36,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.fromLTRB(16, 40, 0, 24),
               child: Text(
                 "💃🏻 Live Right Now",
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             Expanded(
@@ -52,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.fromLTRB(16, 50, 0, 24),
               child: Text(
                 "📈 Fresh Talent",
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             Expanded(
@@ -78,6 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text("An error occurred");
+        }
+
+        if (!snapshot.hasData) {
+          return LoadingIndicator();
         }
 
         return ListView.builder(
