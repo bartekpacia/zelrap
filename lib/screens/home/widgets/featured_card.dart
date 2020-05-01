@@ -15,7 +15,6 @@ class FeaturedCard extends StatelessWidget {
       color: Theme.of(context).primaryColor,
       child: Container(
         padding: EdgeInsets.all(8),
-        width: 150,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
@@ -27,7 +26,7 @@ class FeaturedCard extends StatelessWidget {
           ),
         ),
         child: Align(
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.bottomLeft,
           child: Text(
             name,
             style: Theme.of(context).textTheme.headline6,

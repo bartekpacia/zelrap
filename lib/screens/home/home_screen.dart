@@ -13,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hi, User"),
+        title: const Text("Hi, User"),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 16),
@@ -85,12 +85,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return ListView.builder(
           shrinkWrap: true,
+          itemExtent: 176,
+          padding: EdgeInsets.symmetric(horizontal: 16),
           scrollDirection: Axis.horizontal,
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) {
             final name = snapshot.data.documents[index].data["name"];
 
-            return FeaturedCard(name: name);
+            return Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: FeaturedCard(name: name),
+            );
           },
         );
       },

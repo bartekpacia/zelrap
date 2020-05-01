@@ -7,11 +7,14 @@ const _white = TextStyle(color: Colors.white);
 MaterialColor createMaterialColor(Color color) {
   List strengths = [0.05];
   Map swatch = <int, Color>{};
-  final int r = color.red, g = color.green, b = color.blue;
+  final int r = color.red;
+  final int g = color.green;
+  final int b = color.blue;
 
   for (int i = 1; i < 10; i++) {
     strengths.add(0.1 * i);
   }
+
   strengths.forEach((strength) {
     final double ds = 0.5 - strength;
     swatch[(strength * 1000).round()] = Color.fromRGBO(
@@ -23,7 +26,6 @@ MaterialColor createMaterialColor(Color color) {
   });
 
   final materialColor = MaterialColor(color.value, swatch);
-  print("MatColor for color $color: ${materialColor.shade900}");
 
   return materialColor;
 }
@@ -46,15 +48,20 @@ ThemeData lightTheme(BuildContext context) {
       ),
     ),
     textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.black87),
-    primaryTextTheme: Theme.of(context).textTheme.merge(
-          TextTheme(
-            headline1: _almostBlack,
-            headline2: _almostBlack,
-            headline3: _almostBlack,
-            headline4: _almostBlack,
-            headline5: _almostBlack,
-            headline6: _almostBlack,
-          ),
+    primaryTextTheme: Theme.of(context).textTheme.copyWith(
+          headline1: _almostBlack,
+          headline2: _almostBlack,
+          headline3: _almostBlack,
+          headline4: _almostBlack,
+          headline5: _almostBlack,
+          headline6: _almostBlack,
+          subtitle1: _almostBlack,
+          subtitle2: _almostBlack,
+          bodyText1: _almostBlack,
+          bodyText2: _almostBlack,
+          button: _almostBlack,
+          caption: _almostBlack,
+          overline: _almostBlack,
         ),
   );
 }
@@ -77,15 +84,20 @@ ThemeData darkTheme(BuildContext context) {
       ),
     ),
     textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.white),
-    primaryTextTheme: Theme.of(context).textTheme.merge(
-          TextTheme(
-            headline1: _white,
-            headline2: _white,
-            headline3: _white,
-            headline4: _white,
-            headline5: _white,
-            headline6: _white,
-          ),
+    primaryTextTheme: Theme.of(context).textTheme.copyWith(
+          headline1: _white,
+          headline2: _white,
+          headline3: _white,
+          headline4: _white,
+          headline5: _white,
+          headline6: _white,
+          subtitle1: _white,
+          subtitle2: _white,
+          bodyText1: _white,
+          bodyText2: _white,
+          button: _white,
+          caption: _white,
+          overline: _white,
         ),
   );
 }
