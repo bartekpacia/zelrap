@@ -13,7 +13,7 @@ class FeaturedCard extends StatelessWidget {
       ),
       color: Theme.of(context).primaryColor,
       child: Container(
-        height: 200,
+        width: 150,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,

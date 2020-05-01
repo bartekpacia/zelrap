@@ -12,6 +12,7 @@ ThemeData lightTheme(BuildContext context) {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
+      elevation: 0,
       color: Colors.white,
       textTheme: TextTheme(
         headline6: Theme.of(context).textTheme.headline6.merge(_almostBlack),
@@ -39,6 +40,13 @@ ThemeData darkTheme(BuildContext context) {
     accentColor: Colors.amberAccent,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     scaffoldBackgroundColor: Colors.black87,
+    appBarTheme: AppBarTheme(
+      elevation: 0,
+      color: Colors.black87,
+      textTheme: TextTheme(
+        headline6: Theme.of(context).textTheme.headline6.merge(_white),
+      ),
+    ),
     textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.black87),
     primaryTextTheme: Theme.of(context).primaryTextTheme.merge(
           TextTheme(

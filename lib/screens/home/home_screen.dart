@@ -12,11 +12,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         title: Text("Hi, User"),
       ),
       body: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
@@ -31,34 +30,67 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: Firestore.instance.collection("celebrities").snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text("An error occurred");
-                  }
-
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index) {
-                      final name = snapshot.data.documents[index].data["name"];
-
-                      return FeaturedCard(name: name);
-                    },
-                  );
-                },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 40, 0, 24),
+              child: Text(
+                "💃🏻 Live Right Now",
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             Expanded(
-              child: Text("dupa"),
-            )
+              child: buildHorizontalList(
+                context,
+                Firestore.instance
+                    .collection("celebrities")
+                    .where("isLive", isEqualTo: true)
+                    .snapshots(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 50, 0, 24),
+              child: Text(
+                "📈 Fresh Talent",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+            Expanded(
+              child: buildHorizontalList(
+                context,
+                Firestore.instance
+                    .collection("celebrities")
+                    .where("joinedDate",
+                        isGreaterThanOrEqualTo:
+                            DateTime(DateTime.now().year, DateTime.now().month - 1))
+                    .snapshots(),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildHorizontalList(BuildContext context, Stream<QuerySnapshot> stream) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text("An error occurred");
+        }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) {
+            final name = snapshot.data.documents[index].data["name"];
+
+            return FeaturedCard(name: name);
+          },
+        );
+      },
     );
   }
 }
