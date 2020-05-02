@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:zelrap/data/notification_item.dart';
+import 'package:zelrap/data/models/notification_item.dart';
 import 'package:zelrap/screens/home/home_screen.dart';
 import 'package:zelrap/theme.dart';
 
@@ -50,9 +50,7 @@ class _ZelrapAppState extends State<ZelrapApp> {
         print("onMessage: $message");
         _showItemDialog(message);
       },
-      onBackgroundMessage: (Map<String, dynamic> message) async {
-        print("onBackgroundMessage: $message");
-      },
+      onBackgroundMessage: _handleBackgroundMessage,
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
       },
@@ -84,4 +82,8 @@ class _ZelrapAppState extends State<ZelrapApp> {
       home: HomeScreen(),
     );
   }
+}
+
+Future<void> _handleBackgroundMessage(Map<String, dynamic> message) async {
+  print("onBackgroundMessage: $message");
 }

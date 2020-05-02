@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:zelrap/data/person.dart';
+import 'package:zelrap/data/data_repository.dart';
+import 'package:zelrap/data/models/person.dart';
 import 'package:zelrap/screens/home/widgets/featured_card.dart';
 import 'package:zelrap/widgets/loading_indicator.dart';
 
@@ -40,13 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Expanded(
-              child: buildHorizontalList(
-                context,
-                Firestore.instance
-                    .collection("celebrities")
-                    .where("isLive", isEqualTo: true)
-                    .snapshots(),
-              ),
+              child: buildHorizontalList(context, DataRepository.instance.listenLiveCelebrities()),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 50, 0, 24),
@@ -56,15 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Expanded(
-              child: buildHorizontalList(
-                context,
-                Firestore.instance
-                    .collection("celebrities")
-                    .where("joinedDate",
-                        isGreaterThanOrEqualTo:
-                            DateTime(DateTime.now().year, DateTime.now().month - 1))
-                    .snapshots(),
-              ),
+              child: buildHorizontalList(context, DataRepository.instance.listenFreshCelebrities()),
             ),
           ],
         ),
@@ -72,12 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildHorizontalList(BuildContext context, Stream<QuerySnapshot> stream) {
-    return StreamBuilder<QuerySnapshot>(
+  Widget buildHorizontalList(BuildContext context, Stream<List<Celebrity>> stream) {
+    return StreamBuilder<List<Celebrity>>(
       stream: stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text("An error occurred");
+          return Text("An error occurred. ${snapshot.error}");
         }
 
         if (!snapshot.hasData) {
@@ -89,15 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
           itemExtent: 176,
           padding: EdgeInsets.symmetric(horizontal: 16),
           scrollDirection: Axis.horizontal,
-          itemCount: snapshot.data.documents.length,
+          itemCount: snapshot.data.length,
           itemBuilder: (context, index) {
-            final doc = snapshot.data.documents[index].data;
-            final celebrity = Celebrity(
-              name: doc["name"],
-              photoUrl: doc["photo"],
-              joinedDate: doc["joinedDate"].toDate(),
-              isLive: doc["isLive"],
-            );
+            final celebrity = snapshot.data[index];
 
             return Padding(
               padding: const EdgeInsets.only(right: 16),
