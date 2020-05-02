@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:zelrap/data/notification_item.dart';
 import 'package:zelrap/data/person.dart';
 import 'package:zelrap/screens/home/widgets/featured_card.dart';
 import 'package:zelrap/widgets/loading_indicator.dart';
@@ -12,59 +10,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  Widget _buildDialog(BuildContext context, NotificationItem item) {
-    return AlertDialog(
-      title: Text(item.title),
-      content: Text(item.body),
-      actions: <Widget>[
-        FlatButton(
-          child: const Text('OK'),
-          onPressed: () {
-            Navigator.pop(context, true);
-          },
-        ),
-      ],
-    );
-  }
-
-  void _showItemDialog(Map<String, dynamic> message) {
-    showDialog<bool>(
-      context: context,
-      builder: (_) => _buildDialog(context, NotificationItem.fromFCM(message)),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        _showItemDialog(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-
-    _firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true),
-    );
-
-    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
-
-    _firebaseMessaging.getToken().then((String token) {
-      print("FCM token: $token");
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
