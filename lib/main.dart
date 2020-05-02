@@ -18,6 +18,7 @@ class _ZelrapAppState extends State<ZelrapApp> {
 
   final navigatorKey = GlobalKey<NavigatorState>();
 
+  /// Constructs an AlertDialog ready to be shown
   Widget _buildDialog(BuildContext context, NotificationItem item) {
     return AlertDialog(
       title: Text(item.title),
@@ -33,7 +34,8 @@ class _ZelrapAppState extends State<ZelrapApp> {
     );
   }
 
-  void _showItemDialog(Map<String, dynamic> message) {
+  /// Shows AlertDialog with data from the FCM notification
+  void _showNotificationItemDialog(Map<String, dynamic> message) {
     final context = navigatorKey.currentState.overlay.context;
 
     showDialog<bool>(
@@ -48,7 +50,7 @@ class _ZelrapAppState extends State<ZelrapApp> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        _showItemDialog(message);
+        _showNotificationItemDialog(message);
       },
       onBackgroundMessage: _handleBackgroundMessage,
       onLaunch: (Map<String, dynamic> message) async {

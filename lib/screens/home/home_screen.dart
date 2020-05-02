@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zelrap/data/data_repository.dart';
-import 'package:zelrap/data/models/person.dart';
-import 'package:zelrap/screens/home/widgets/featured_card.dart';
-import 'package:zelrap/widgets/loading_indicator.dart';
+import 'package:zelrap/screens/home/pages/home_page.dart';
+import 'package:zelrap/screens/home/pages/notifications_page.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,82 +8,38 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final pageController = PageController();
+  int tabIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Hi, User"),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColorDark,
-            ],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: tabIndex,
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        onTap: (int index) {
+          setState(() {
+            tabIndex = index;
+            print("TAP TAP TAP $index, $tabIndex");
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, color: Theme.of(context).accentColor),
+            title: new Text('Home'),
           ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 40, 0, 24),
-              child: Text(
-                "💃🏻 Live Right Now",
-                style: Theme.of(context).textTheme.headline5,
-              ),
-            ),
-            Expanded(
-              child: buildHorizontalList(context, DataRepository.instance.listenLiveCelebrities()),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 50, 0, 24),
-              child: Text(
-                "📈 Fresh Talent",
-                style: Theme.of(context).textTheme.headline5,
-              ),
-            ),
-            Expanded(
-              child: buildHorizontalList(context, DataRepository.instance.listenFreshCelebrities()),
-            ),
-          ],
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications, color: Theme.of(context).accentColor),
+            title: new Text('Notifications'),
+          ),
+        ],
       ),
-    );
-  }
-
-  Widget buildHorizontalList(BuildContext context, Stream<List<Celebrity>> stream) {
-    return StreamBuilder<List<Celebrity>>(
-      stream: stream,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text("An error occurred. ${snapshot.error}");
-        }
-
-        if (!snapshot.hasData) {
-          return LoadingIndicator();
-        }
-
-        return ListView.builder(
-          shrinkWrap: true,
-          itemExtent: 176,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          scrollDirection: Axis.horizontal,
-          itemCount: snapshot.data.length,
-          itemBuilder: (context, index) {
-            final celebrity = snapshot.data[index];
-
-            return Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: FeaturedCard(celebrity: celebrity),
-            );
-          },
-        );
-      },
+      body: tabIndex == 0 ? HomePage() : NotificationsPage(),
     );
   }
 }
