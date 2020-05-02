@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:zelrap/data/person.dart';
 
 class FeaturedCard extends StatelessWidget {
-  final String name;
+  final Celebrity celebrity;
 
-  const FeaturedCard({Key key, @required this.name}) : super(key: key);
+  const FeaturedCard({Key key, @required this.celebrity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +18,15 @@ class FeaturedCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: [
-              Color(0xffeeeeee),
-              Color(0xffffffff),
-            ],
+          image: DecorationImage(
+            image: CachedNetworkImageProvider(celebrity.photoUrl),
+            fit: BoxFit.cover,
           ),
         ),
         child: Align(
           alignment: Alignment.bottomLeft,
           child: Text(
-            name,
+            celebrity.name,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),

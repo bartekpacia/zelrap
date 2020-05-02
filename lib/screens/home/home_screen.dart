@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:zelrap/data/person.dart';
 import 'package:zelrap/screens/home/widgets/featured_card.dart';
 import 'package:zelrap/widgets/loading_indicator.dart';
 
@@ -90,11 +91,17 @@ class _HomeScreenState extends State<HomeScreen> {
           scrollDirection: Axis.horizontal,
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) {
-            final name = snapshot.data.documents[index].data["name"];
+            final doc = snapshot.data.documents[index].data;
+            final celebrity = Celebrity(
+              name: doc["name"],
+              photoUrl: doc["photo"],
+              joinedDate: doc["joinedDate"].toDate(),
+              isLive: doc["isLive"],
+            );
 
             return Padding(
               padding: const EdgeInsets.only(right: 16),
-              child: FeaturedCard(name: name),
+              child: FeaturedCard(celebrity: celebrity),
             );
           },
         );
