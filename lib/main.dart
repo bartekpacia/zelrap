@@ -1,12 +1,23 @@
-import 'dart:async';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-final Map<String, Item> _items = <String, Item>{};
+/// Represents a notification coming from FCM
+class NotificationItem {
+  final String title;
+  final String body;
+  final dynamic data;
 
-void main() {
-  runApp(PushMessagingExample());
+  NotificationItem({@required this.title, @required this.body, @required this.data});
+
+  /// Creates a notification using data received from FCM
+  factory NotificationItem.fromFCM(Map<String, dynamic> message) {
+    final String title = message["notification"]["title"];
+    final String body = message["notification"]["body"];
+    final dynamic data = message["data"];
+
+    final NotificationItem item = NotificationItem(title: title, body: body, data: data);
+    return item;
+  }
 }
 
 class PushMessagingExample extends StatefulWidget {
@@ -15,37 +26,37 @@ class PushMessagingExample extends StatefulWidget {
 }
 
 class _PushMessagingExampleState extends State<PushMessagingExample> {
-  String _homeScreenText = "Waiting for token...";
-
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  Widget _buildDialog(Item item) {
+  Widget _buildDialog(BuildContext context, NotificationItem item) {
     return AlertDialog(
-      content: Text("Item ${item.itemId} has been updated"),
-      actions: [
+      title: Text(item.title),
+      content: Text(item.body),
+      actions: <Widget>[
         FlatButton(
           child: const Text('OK'),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
         ),
       ],
     );
   }
 
-  void _showItemDialog(BuildContext context, Map<String, dynamic> message) {
+  void _showItemDialog(Map<String, dynamic> message) {
     showDialog<bool>(
       context: context,
-      builder: (_) => _buildDialog(_itemForMessage(message)),
+      builder: (_) => _buildDialog(context, NotificationItem.fromFCM(message)),
     );
   }
 
   @override
   void initState() {
     super.initState();
-
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        _showItemDialog(context, message);
+        _showItemDialog(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -62,54 +73,29 @@ class _PushMessagingExampleState extends State<PushMessagingExample> {
     _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
+
     _firebaseMessaging.getToken().then((String token) {
-      assert(token != null);
-      setState(() {
-        _homeScreenText = "Push Messaging token: $token";
-      });
-      print(_homeScreenText);
+      print("FCM token: $token");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Push Messaging Demo'),
-        ),
-        body: Center(
-          child: const Text("hello word"),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Push Messaging Demo'),
+      ),
+      body: Center(
+        child: Text("hello word"),
       ),
     );
   }
 }
 
-Item _itemForMessage(Map<String, dynamic> message) {
-  final dynamic data = message['data'] ?? message;
-  final String itemId = data['id'];
-  final Item item = _items.putIfAbsent(itemId, () => Item(itemId: itemId))..status = data['status'];
-  return item;
-}
-
-class Item {
-  Item({this.itemId});
-
-  final String itemId;
-
-  StreamController<Item> _controller = StreamController<Item>.broadcast();
-
-  Stream<Item> get onChanged => _controller.stream;
-
-  String _status;
-
-  String get status => _status;
-
-  set status(String value) {
-    _status = value;
-    _controller.add(this);
-  }
-
-  static final Map<String, Route<void>> routes = <String, Route<void>>{};
+void main() {
+  runApp(
+    MaterialApp(
+      home: PushMessagingExample(),
+    ),
+  );
 }
