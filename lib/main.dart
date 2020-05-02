@@ -50,6 +50,9 @@ class _ZelrapAppState extends State<ZelrapApp> {
         print("onMessage: $message");
         _showItemDialog(message);
       },
+      onBackgroundMessage: (Map<String, dynamic> message) async {
+        print("onBackgroundMessage: $message");
+      },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
       },
