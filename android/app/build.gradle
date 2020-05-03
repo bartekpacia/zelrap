@@ -44,6 +44,18 @@ android {
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        compileOptions {
+            sourceCompatibility(1.8)
+            targetCompatibility(1.8)
+        }
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+
+        ndk {
+            abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'armeabi-v8a', 'armeabi'
+        }
     }
 
     buildTypes {

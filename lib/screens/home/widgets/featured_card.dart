@@ -27,7 +27,7 @@ class FeaturedCard extends StatelessWidget {
           alignment: Alignment.bottomLeft,
           child: Text(
             celebrity.name,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.headline6.apply(color: Colors.white),
           ),
         ),
       ),
