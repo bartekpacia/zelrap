@@ -47,6 +47,13 @@ class _ZelrapAppState extends State<ZelrapApp> {
   @override
   void initState() {
     super.initState();
+
+    final topicName = "live_updates";
+
+    _firebaseMessaging
+        .subscribeToTopic(topicName)
+        .then((value) => print("subscribed to topic $topicName"));
+
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
