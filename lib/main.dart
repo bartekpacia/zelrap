@@ -1,7 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:zelrap/data/models/notification_item.dart';
-import 'package:zelrap/screens/home/home_screen.dart';
+import 'package:zelrap/screens/login/login_screen.dart';
 import 'package:zelrap/theme.dart';
 
 void main() {
@@ -88,7 +88,7 @@ class _ZelrapAppState extends State<ZelrapApp> {
       title: 'Zelrap',
       theme: lightTheme(context),
       darkTheme: darkTheme(context),
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }

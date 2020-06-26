@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:zelrap/data/models/account.dart';
 import 'package:zelrap/screens/home/pages/home_page.dart';
 import 'package:zelrap/screens/home/pages/notifications_page.dart';
 
 class HomeScreen extends StatefulWidget {
+  final Account account;
+
+  const HomeScreen({Key key, @required this.account}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
