@@ -43,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future _login(BuildContext context) async {
     if (_userController.text.length > 0) {
+      print(_userController.text);
       final Account account = await ApiService().login(_userController.text);
 
       Navigator.push(
