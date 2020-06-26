@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zelrap/data/models/account.dart';
+import 'package:zelrap/screens/home/pages/feed_page.dart';
 import 'package:zelrap/screens/home/pages/home_page.dart';
 import 'package:zelrap/screens/home/pages/notifications_page.dart';
 
@@ -42,9 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.notifications, color: Theme.of(context).accentColor),
             title: new Text('Notifications'),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.rss_feed, color: Theme.of(context).accentColor),
+            title: new Text('Feed'),
+          ),
         ],
       ),
-      body: tabIndex == 0 ? HomePage() : NotificationsPage(),
+      body: tabIndex == 0
+          ? HomePage()
+          : tabIndex == 1 ? NotificationsPage() : FeedPage(account: widget.account),
     );
   }
 }
