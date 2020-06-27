@@ -12,26 +12,68 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
+  Future<List<dynamic>> _activities;
   final TextEditingController _messageController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _activities = _getActivities();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(12.0),
-      child: Center(
-        child: Column(
-          children: [
-            TextField(
-              controller: _messageController,
+    return ListView(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(12),
+          child: Center(
+            child: Column(
+              children: [
+                TextField(controller: _messageController),
+                MaterialButton(
+                  onPressed: () => _postMessage(context),
+                  child: Text("Post"),
+                ),
+              ],
             ),
-            MaterialButton(
-              onPressed: () => _postMessage(context),
-              child: Text("Post"),
-            ),
-          ],
+          ),
         ),
-      ),
+        FutureBuilder<List<dynamic>>(
+            future: _activities,
+            builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              return Container(
+                child: Center(
+                  child: RefreshIndicator(
+                    onRefresh: _refreshActivities,
+                    child: ListView(
+                      children: snapshot.data
+                          .map((activity) => ListTile(
+                                title: Text(activity['message']),
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                ),
+              );
+            }),
+      ],
     );
+  }
+
+  Future<List<dynamic>> _getActivities() async {
+    return await ApiService().getActivities(widget.account);
+  }
+
+  Future _refreshActivities() async {
+    setState(() {
+      _activities = _getActivities();
+    });
+    return null;
   }
 
   Future _postMessage(BuildContext context) async {

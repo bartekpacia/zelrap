@@ -3,6 +3,7 @@ package pl.bartekpacia.zelrap
 import io.flutter.embedding.android.FlutterActivity
 import io.getstream.cloud.CloudClient
 import io.getstream.core.models.Activity
+import io.getstream.core.options.Limit
 import java.util.UUID
 
 class MainActivity: FlutterActivity() {
@@ -22,5 +23,11 @@ class MainActivity: FlutterActivity() {
                 .extraField("message", message)
                 .build()
         ).join()
+    }
+
+    private fun getActivities(user: String, token: String): List<Activity> {
+        val client = CloudClient.builder(API_KEY, token, user).build()
+
+        return client.flatFeed("user").getActivities(Limit(25)).join()
     }
 }
