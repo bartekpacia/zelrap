@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zelrap/data/models/account.dart';
-import 'package:zelrap/screens/home/pages/feed_page.dart';
 import 'package:zelrap/screens/home/pages/home_page.dart';
 import 'package:zelrap/screens/home/pages/people_page.dart';
+import 'package:zelrap/screens/home/pages/profile_page.dart';
 import 'package:zelrap/screens/home/pages/timeline_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Hi, User"),
+        title: Text("Hi, ${widget.account.username}"),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: tabIndex,
@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (int index) {
           setState(() {
             tabIndex = index;
-            print("TAP TAP TAP $index, $tabIndex");
           });
         },
         items: [
@@ -54,21 +53,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: tabIndex == 0
-          ? HomePage()
-          : tabIndex == 1 ? TimelinePage() : ProfilePage(account: widget.account),
+      body: _buildBody(context, tabIndex),
     );
   }
 
   Widget _buildBody(BuildContext context, int index) {
     if (index == 0) {
-      return HomePage();
+      return HomePage(account: widget.account);
     } else if (index == 1) {
-      return TimelinePage();
+      return TimelinePage(account: widget.account);
     } else if (index == 2) {
       return ProfilePage(account: widget.account);
     } else if (index == 3) {
-      return PeoplePage();
+      return PeoplePage(account: widget.account);
+    } else {
+      return Center(
+        child: Text("tabIndex is wrong"),
+      );
     }
   }
 }

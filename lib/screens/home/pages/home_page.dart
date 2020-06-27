@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:zelrap/data/api_service.dart';
 import 'package:zelrap/data/data_repository.dart';
+import 'package:zelrap/data/models/account.dart';
 import 'package:zelrap/data/models/person.dart';
 import 'package:zelrap/screens/home/widgets/featured_card.dart';
 import 'package:zelrap/widgets/loading_indicator.dart';
 
 class HomePage extends StatefulWidget {
+  final Account account;
+
+  const HomePage({Key key, @required this.account}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final _postTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,6 +36,16 @@ class _HomePageState extends State<HomePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          TextField(
+            controller: _postTextController,
+          ),
+          RaisedButton(
+            child: Text("Add post"),
+            onPressed: () async {
+              print("account: ${widget.account}, text: ${_postTextController.text}");
+              await ApiService().postMessage(widget.account, _postTextController.text);
+            },
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 40, 0, 24),
             child: Text(

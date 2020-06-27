@@ -1,33 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zelrap/data/api_service.dart';
 import 'package:zelrap/data/models/account.dart';
 
-class TimelinePage extends StatefulWidget {
+class ProfilePage extends StatefulWidget {
   final Account account;
 
-  const TimelinePage({Key key, @required this.account}) : super(key: key);
+  const ProfilePage({Key key, @required this.account}) : super(key: key);
 
   @override
-  _TimelinePageState createState() => _TimelinePageState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _TimelinePageState extends State<TimelinePage> {
-  Future<List<dynamic>> _activities;
+class _ProfilePageState extends State<ProfilePage> {
+  Future<List> _activities;
 
   @override
   void initState() {
     super.initState();
-    _activities = _getTimeline();
+    _activities = _getActivities();
   }
 
-  Future<List<dynamic>> _getTimeline() async {
-    return await ApiService().getTimeline(widget.account);
+  Future<List<dynamic>> _getActivities() async {
+    return await ApiService().getActivities(widget.account);
   }
 
   Future _refreshActivities() async {
     setState(() {
-      _activities = _getTimeline();
+      _activities = _getActivities();
     });
     return null;
   }
@@ -38,7 +37,7 @@ class _TimelinePageState extends State<TimelinePage> {
       future: _activities,
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: Text("TimelinePage: no data"));
+          return Center(child: Text("ProfilePage: no data"));
         }
 
         return Container(
@@ -49,7 +48,6 @@ class _TimelinePageState extends State<TimelinePage> {
                 children: snapshot.data
                     .map((activity) => ListTile(
                           title: Text(activity['message']),
-                          subtitle: Text(activity['actor']),
                         ))
                     .toList(),
               ),

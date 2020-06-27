@@ -17,15 +17,38 @@ class ApiService {
     var feedResponse = await http.post(_streamUrl, headers: {"Authorization": "Bearer $authToken"});
     var feedToken = json.decode(feedResponse.body)["token"];
 
-    return Account(username: username, authToken: authToken, feedToken: feedToken);
+    final account = Account(username: username, authToken: authToken, feedToken: feedToken);
+
+    print("LOGGED IN. Account: $account");
+
+    return account;
+  }
+
+  Future<List<dynamic>> getUsers(Account account) async {
+    var response = await http.get(_getUsers);
+    return json.decode(response.body)["users"];
+  }
+
+  Future<bool> follow(Account account, String userToFollow) async {
+    return await platform.invokeMethod<bool>(
+      "follow",
+      {
+        "user": account.username,
+        "token": account.feedToken,
+        "userToFollow": userToFollow,
+      },
+    );
   }
 
   Future<bool> postMessage(Account account, String message) async {
-    return await platform.invokeMethod<bool>("postMessage", {
-      "user": account.username,
-      "token": account.feedToken,
-      "message": message,
-    });
+    return await platform.invokeMethod<bool>(
+      "postMessage",
+      {
+        "user": account.username,
+        "token": account.feedToken,
+        "message": message,
+      },
+    );
   }
 
   Future<dynamic> getActivities(Account account) async {
@@ -36,6 +59,18 @@ class ApiService {
         "token": account.feedToken,
       },
     );
+    return json.decode(result);
+  }
+
+  Future<List<dynamic>> getTimeline(Account account) async {
+    final String result = await platform.invokeMethod<String>(
+      "getTimeline",
+      {
+        "user": account.username,
+        "token": account.feedToken,
+      },
+    );
+
     return json.decode(result);
   }
 }
