@@ -16,29 +16,20 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Post Message"),
-      ),
-      body: Builder(
-        builder: (context) {
-          return Container(
-            padding: EdgeInsets.all(12.0),
-            child: Center(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _messageController,
-                  ),
-                  MaterialButton(
-                    onPressed: () => _postMessage(context),
-                    child: Text("Post"),
-                  ),
-                ],
-              ),
+    return Container(
+      padding: EdgeInsets.all(12.0),
+      child: Center(
+        child: Column(
+          children: [
+            TextField(
+              controller: _messageController,
             ),
-          );
-        },
+            MaterialButton(
+              onPressed: () => _postMessage(context),
+              child: Text("Post"),
+            ),
+          ],
+        ),
       ),
     );
   }
