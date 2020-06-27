@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:zelrap/data/api_service.dart';
 import 'package:zelrap/data/models/account.dart';
 
-class FeedPage extends StatefulWidget {
+class ProfilePage extends StatefulWidget {
   final Account account;
 
-  const FeedPage({Key key, @required this.account}) : super(key: key);
+  const ProfilePage({Key key, @required this.account}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _FeedPageState extends State<FeedPage> {
+class _ProfilePageState extends State<ProfilePage> {
   Future<List<dynamic>> _activities;
   final TextEditingController _messageController = TextEditingController();
 

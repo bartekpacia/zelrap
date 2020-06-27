@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zelrap/data/models/account.dart';
 import 'package:zelrap/screens/home/pages/feed_page.dart';
 import 'package:zelrap/screens/home/pages/home_page.dart';
-import 'package:zelrap/screens/home/pages/notifications_page.dart';
+import 'package:zelrap/screens/home/pages/people_page.dart';
+import 'package:zelrap/screens/home/pages/timeline_page.dart';
 
 class HomeScreen extends StatefulWidget {
   final Account account;
@@ -40,18 +41,34 @@ class _HomeScreenState extends State<HomeScreen> {
             title: new Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications, color: Theme.of(context).accentColor),
-            title: new Text('Notifications'),
+            icon: Icon(Icons.timeline, color: Theme.of(context).accentColor),
+            title: new Text('Timeline'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.rss_feed, color: Theme.of(context).accentColor),
-            title: new Text('Feed'),
+            icon: Icon(Icons.person, color: Theme.of(context).accentColor),
+            title: new Text('Profile'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people, color: Theme.of(context).accentColor),
+            title: new Text('People'),
           ),
         ],
       ),
       body: tabIndex == 0
           ? HomePage()
-          : tabIndex == 1 ? NotificationsPage() : FeedPage(account: widget.account),
+          : tabIndex == 1 ? TimelinePage() : ProfilePage(account: widget.account),
     );
+  }
+
+  Widget _buildBody(BuildContext context, int index) {
+    if (index == 0) {
+      return HomePage();
+    } else if (index == 1) {
+      return TimelinePage();
+    } else if (index == 2) {
+      return ProfilePage(account: widget.account);
+    } else if (index == 3) {
+      return PeoplePage();
+    }
   }
 }
