@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Hi, User"),
+        title: const Text('Hi, User'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: tabIndex,
@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (int index) {
           setState(() {
             tabIndex = index;
-            print("TAP TAP TAP $index, $tabIndex");
+            print('tapped $index, $tabIndex');
           });
         },
         items: [

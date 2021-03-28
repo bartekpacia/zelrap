@@ -10,9 +10,9 @@ class NotificationItem {
 
   /// Creates a notification using data received from FCM
   factory NotificationItem.fromFCM(Map<String, dynamic> message) {
-    final String title = message["notification"]["title"];
-    final String body = message["notification"]["body"];
-    final dynamic data = message["data"];
+    final String title = message['notification']['title'];
+    final String body = message['notification']['body'];
+    final dynamic data = message['data'];
 
     final NotificationItem item = NotificationItem(title: title, body: body, data: data);
     return item;

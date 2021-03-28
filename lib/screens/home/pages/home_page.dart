@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 40, 0, 24),
             child: Text(
-              "💃🏻 Live Right Now",
+              '💃🏻 Live Right Now',
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 50, 0, 24),
             child: Text(
-              "📈 Fresh Talent",
+              '📈 Fresh Talent',
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       stream: stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text("An error occurred. ${snapshot.error}");
+          return Text('An error occurred. ${snapshot.error}');
         }
 
         if (!snapshot.hasData) {

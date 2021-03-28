@@ -48,23 +48,23 @@ class _ZelrapAppState extends State<ZelrapApp> {
   void initState() {
     super.initState();
 
-    final topicName = "live_updates";
+    final topicName = 'live_updates';
 
     _firebaseMessaging
         .subscribeToTopic(topicName)
-        .then((value) => print("subscribed to topic $topicName"));
+        .then((value) => print('subscribed to topic $topicName'));
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
+        print('onMessage: $message');
         _showNotificationItemDialog(message);
       },
       onBackgroundMessage: _handleBackgroundMessage,
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
+        print('onLaunch: $message');
       },
       onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
+        print('onResume: $message');
       },
     );
 
@@ -73,11 +73,11 @@ class _ZelrapAppState extends State<ZelrapApp> {
     );
 
     _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
+      print('Settings registered: $settings');
     });
 
     _firebaseMessaging.getToken().then((String token) {
-      print("FCM token: $token");
+      print('FCM token: $token');
     });
   }
 
@@ -89,10 +89,11 @@ class _ZelrapAppState extends State<ZelrapApp> {
       theme: lightTheme(context),
       darkTheme: darkTheme(context),
       home: HomeScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
 Future<void> _handleBackgroundMessage(Map<String, dynamic> message) async {
-  print("onBackgroundMessage: $message");
+  print('onBackgroundMessage: $message');
 }
