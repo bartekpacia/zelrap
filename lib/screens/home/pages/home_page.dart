@@ -19,8 +19,8 @@ class _HomePageState extends State<HomePage> {
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
           colors: [
-            Theme.of(context).primaryColor,
-            Theme.of(context).primaryColorDark,
+            Theme.of(context).colorScheme.background,
+            Theme.of(context).colorScheme.surface,
           ],
         ),
       ),

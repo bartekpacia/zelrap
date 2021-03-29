@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (int index) {
           setState(() {
             tabIndex = index;
-            print('tapped $index, $tabIndex');
           });
         },
         items: [

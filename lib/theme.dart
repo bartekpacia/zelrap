@@ -46,14 +46,12 @@ class AppTheme {
         ? Typography.material2018(platform: defaultTargetPlatform).white
         : Typography.material2018(platform: defaultTargetPlatform).black;
 
-    final darkPrimary = Color(0xff4d7b00);
-
     final theme = ThemeData.from(
       colorScheme: ColorScheme(
         primary: primary,
-        primaryVariant: isDark ? darkPrimary : primary,
+        primaryVariant: primary,
         secondary: primary,
-        secondaryVariant: darkPrimary,
+        secondaryVariant: primary,
         surface: surface,
         background: background,
         error: error,
@@ -74,7 +72,6 @@ class AppTheme {
     final buttonColor = isDark ? darkerText : Color.lerp(primary, darkerText, 0.8);
 
     return theme.copyWith(
-      primaryColorDark: darkPrimary,
       bottomAppBarColor: isDark ? surface : primary,
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
