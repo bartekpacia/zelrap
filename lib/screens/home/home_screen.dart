@@ -31,11 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home, color: Theme.of(context).accentColor),
-            title: new Text('Home'),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications, color: Theme.of(context).accentColor),
-            title: new Text('Notifications'),
+            label: 'Notifications',
           ),
         ],
       ),

@@ -1,103 +1,87 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-const _almostBlack = TextStyle(color: Colors.black87);
-const _white = TextStyle(color: Colors.white);
-
-// Awesome piece of code copy-pasted from https://medium.com/@filipvk/creating-a-custom-color-swatch-in-flutter-554bcdcb27f3
-MaterialColor createMaterialColor(Color color) {
-  List strengths = [0.05];
-  Map swatch = <int, Color>{};
-  final int r = color.red;
-  final int g = color.green;
-  final int b = color.blue;
-
-  for (int i = 1; i < 10; i++) {
-    strengths.add(0.1 * i);
+class AppTheme {
+  static ThemeData light() {
+    return _build(
+      brightness: Brightness.light,
+      primary: Colors.amberAccent,
+      lighterText: Colors.white,
+      darkerText: Colors.black,
+      surface: Colors.white,
+      background: const Color(0xFFF1F1F1),
+      error: const Color(0xFFD32F2F),
+      onError: Colors.white,
+    );
   }
 
-  strengths.forEach((strength) {
-    final double ds = 0.5 - strength;
-    swatch[(strength * 1000).round()] = Color.fromRGBO(
-      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-      1,
+  static ThemeData dark() {
+    return _build(
+      brightness: Brightness.dark,
+      primary: Colors.amberAccent,
+      lighterText: Colors.white,
+      darkerText: Colors.white,
+      //surface: Colors.red,
+      surface: const Color(0xFF222222),
+      //background: Colors.blue,
+      background: const Color(0xFF121212),
+      error: const Color(0xFFEA9A9A),
+      onError: Colors.black,
     );
-  });
+  }
 
-  final materialColor = MaterialColor(color.value, swatch);
+  static ThemeData _build({
+    required Brightness brightness,
+    required Color primary,
+    required Color lighterText,
+    required Color darkerText,
+    required Color surface,
+    required Color background,
+    required Color error,
+    required Color onError,
+  }) {
+    final isDark = brightness == Brightness.dark;
 
-  return materialColor;
-}
+    final defaultTextTheme = isDark
+        ? Typography.material2018(platform: defaultTargetPlatform).white
+        : Typography.material2018(platform: defaultTargetPlatform).black;
 
-/// Constructs customized light theme
-ThemeData lightTheme(BuildContext context) {
-  final primarySwatch = createMaterialColor(Color(0xfffefefe));
+    final darkPrimary = Color(0xff4d7b00);
 
-  return ThemeData(
-    brightness: Brightness.light,
-    primarySwatch: primarySwatch,
-    accentColor: Colors.amberAccent,
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    scaffoldBackgroundColor: Colors.white,
-    appBarTheme: AppBarTheme(
-      elevation: 0,
-      color: primarySwatch.shade700,
-      textTheme: TextTheme(
-        headline6: Theme.of(context).textTheme.headline6.merge(_almostBlack),
+    final theme = ThemeData.from(
+      colorScheme: ColorScheme(
+        primary: primary,
+        primaryVariant: isDark ? darkPrimary : primary,
+        secondary: primary,
+        secondaryVariant: darkPrimary,
+        surface: surface,
+        background: background,
+        error: error,
+        onPrimary: darkerText,
+        onSecondary: lighterText,
+        onSurface: darkerText,
+        onBackground: darkerText,
+        onError: onError,
+        brightness: brightness,
       ),
-    ),
-    textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.black87),
-    primaryTextTheme: Theme.of(context).textTheme.copyWith(
-          headline1: _almostBlack,
-          headline2: _almostBlack,
-          headline3: _almostBlack,
-          headline4: _almostBlack,
-          headline5: _almostBlack,
-          headline6: _almostBlack,
-          subtitle1: _almostBlack,
-          subtitle2: _almostBlack,
-          bodyText1: _almostBlack,
-          bodyText2: _almostBlack,
-          button: _almostBlack,
-          caption: _almostBlack,
-          overline: _almostBlack,
+      textTheme: defaultTextTheme.copyWith(
+        bodyText2: defaultTextTheme.bodyText2?.copyWith(
+          fontSize: 16,
         ),
-  );
-}
-
-/// Constructs customized dark theme
-ThemeData darkTheme(BuildContext context) {
-  final primarySwatch = createMaterialColor(Color(0xff1a1a1a));
-
-  return ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: primarySwatch,
-    accentColor: Colors.amberAccent,
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    scaffoldBackgroundColor: Colors.black87,
-    appBarTheme: AppBarTheme(
-      elevation: 0,
-      color: Colors.black87,
-      textTheme: TextTheme(
-        headline6: Theme.of(context).textTheme.headline6.merge(_white),
       ),
-    ),
-    textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.white),
-    primaryTextTheme: Theme.of(context).textTheme.copyWith(
-          headline1: _white,
-          headline2: _white,
-          headline3: _white,
-          headline4: _white,
-          headline5: _white,
-          headline6: _white,
-          subtitle1: _white,
-          subtitle2: _white,
-          bodyText1: _white,
-          bodyText2: _white,
-          button: _white,
-          caption: _white,
-          overline: _white,
+    );
+
+    final buttonColor = isDark ? darkerText : Color.lerp(primary, darkerText, 0.8);
+
+    return theme.copyWith(
+      primaryColorDark: darkPrimary,
+      bottomAppBarColor: isDark ? surface : primary,
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          primary: buttonColor,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
         ),
-  );
+      ),
+    );
+  }
 }

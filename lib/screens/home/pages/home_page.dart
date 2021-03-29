@@ -70,9 +70,13 @@ class _HomePageState extends State<HomePage> {
           itemExtent: 176,
           padding: EdgeInsets.symmetric(horizontal: 16),
           scrollDirection: Axis.horizontal,
-          itemCount: snapshot.data.length,
+          itemCount: snapshot.data?.length ?? 0,
           itemBuilder: (context, index) {
-            final celebrity = snapshot.data[index];
+            final celebrity = snapshot.data?[index];
+
+            if (celebrity == null) {
+              return Container();
+            }
 
             return Padding(
               padding: const EdgeInsets.only(right: 16),

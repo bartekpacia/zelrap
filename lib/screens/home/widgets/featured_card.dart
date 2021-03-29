@@ -5,7 +5,7 @@ import 'package:zelrap/data/models/person.dart';
 class FeaturedCard extends StatelessWidget {
   final Celebrity celebrity;
 
-  const FeaturedCard({Key key, @required this.celebrity}) : super(key: key);
+  const FeaturedCard({Key? key, required this.celebrity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class FeaturedCard extends StatelessWidget {
           alignment: Alignment.bottomLeft,
           child: Text(
             celebrity.name,
-            style: Theme.of(context).textTheme.headline6.apply(color: Colors.white),
+            style: Theme.of(context).textTheme.headline6?.apply(color: Colors.white),
           ),
         ),
       ),

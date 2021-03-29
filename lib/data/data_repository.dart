@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zelrap/data/models/person.dart';
 
 class DataRepository {
+  final _firestore = FirebaseFirestore.instance;
   static final DataRepository instance = DataRepository._internal();
-  final _firestore = Firestore.instance;
 
   DataRepository._internal();
 
@@ -26,13 +26,13 @@ class DataRepository {
 
   Stream<List<Celebrity>> _mapQuerySnapshotToCelebrities(Stream<QuerySnapshot> stream) {
     return stream.map(
-      (qSnap) => qSnap.documents
+      (querySnapshot) => querySnapshot.docs
           .map(
             (doc) => Celebrity(
-              name: doc.data['name'],
-              photoUrl: doc.data['photo'],
-              joinedDate: doc.data['joinedDate'].toDate(),
-              isLive: doc.data['isLive'],
+              name: doc.data()?['name'],
+              photoUrl: doc.data()?['photo'],
+              joinedDate: doc.data()?['joinedDate'].toDate(),
+              isLive: doc.data()?['isLive'],
             ),
           )
           .toList(),

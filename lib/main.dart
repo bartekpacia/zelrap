@@ -14,17 +14,17 @@ class ZelrapApp extends StatefulWidget {
 }
 
 class _ZelrapAppState extends State<ZelrapApp> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   final navigatorKey = GlobalKey<NavigatorState>();
 
-  /// Constructs an AlertDialog ready to be shown
+  /// Constructs an AlertDialog ready to be shown.
   Widget _buildDialog(BuildContext context, NotificationItem item) {
     return AlertDialog(
       title: Text(item.title),
       content: Text(item.body),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: const Text('OK'),
           onPressed: () {
             Navigator.pop(context, true);
@@ -34,9 +34,13 @@ class _ZelrapAppState extends State<ZelrapApp> {
     );
   }
 
-  /// Shows AlertDialog with data from the FCM notification
+  /// Shows AlertDialog with data from the FCM notification.
   void _showNotificationItemDialog(Map<String, dynamic> message) {
-    final context = navigatorKey.currentState.overlay.context;
+    final context = navigatorKey.currentState?.overlay?.context;
+
+    if (context == null) {
+      return;
+    }
 
     showDialog<bool>(
       context: context,
@@ -54,29 +58,32 @@ class _ZelrapAppState extends State<ZelrapApp> {
         .subscribeToTopic(topicName)
         .then((value) => print('subscribed to topic $topicName'));
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('onMessage: $message');
-        _showNotificationItemDialog(message);
-      },
-      onBackgroundMessage: _handleBackgroundMessage,
-      onLaunch: (Map<String, dynamic> message) async {
-        print('onLaunch: $message');
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('onResume: $message');
-      },
-    );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _showNotificationItemDialog(message.data);
 
-    _firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true),
-    );
-
-    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-      print('Settings registered: $settings');
+      print('MESSAGING: got a message whilst in the foreground!');
+      print('MESSAGING: message data: ${message.data}');
     });
 
-    _firebaseMessaging.getToken().then((String token) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('MESSAGING: opened app from a notification');
+      print('MESSAGING: data: ${message.data}');
+    });
+
+    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+
+    _firebaseMessaging
+        .requestPermission(
+      alert: true,
+      sound: true,
+      badge: true,
+      provisional: true,
+    )
+        .then((NotificationSettings settings) {
+      print('Notification settings: $settings');
+    });
+
+    _firebaseMessaging.getToken().then((String? token) {
       print('FCM token: $token');
     });
   }
@@ -86,14 +93,14 @@ class _ZelrapAppState extends State<ZelrapApp> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'Zelrap',
-      theme: lightTheme(context),
-      darkTheme: darkTheme(context),
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-Future<void> _handleBackgroundMessage(Map<String, dynamic> message) async {
+Future<void> _handleBackgroundMessage(RemoteMessage message) async {
   print('onBackgroundMessage: $message');
 }
