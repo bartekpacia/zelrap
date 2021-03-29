@@ -1,14 +1,14 @@
-/// Represents a user who can stream.
-class Celebrity {
-  final String name;
-  final String photoUrl;
-  final DateTime joinedDate;
-  final bool isLive;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Celebrity({
-    required this.name,
-    required this.photoUrl,
-    required this.joinedDate,
-    required this.isLive,
-  });
+part 'celebrity.freezed.dart';
+
+/// Represents a user who can stream.
+@freezed
+class Celebrity with _$Celebrity {
+  factory Celebrity({
+    required String name,
+    required String photoUrl,
+    required DateTime joinedDate,
+    required bool isLive,
+  }) = _Celebrity;
 }
