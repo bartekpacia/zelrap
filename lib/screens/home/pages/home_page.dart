@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zelrap/data/data_repository.dart';
-import 'package:zelrap/data/models/person.dart';
+import 'package:zelrap/data/models/celebrity.dart';
 import 'package:zelrap/screens/home/widgets/featured_card.dart';
 import 'package:zelrap/widgets/loading_indicator.dart';
 

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:zelrap/data/models/person.dart';
+import 'package:zelrap/data/models/celebrity.dart';
 
 class DataRepository {
   final _firestore = FirebaseFirestore.instance;
@@ -10,8 +10,10 @@ class DataRepository {
   Stream<List<Celebrity>> listenFreshCelebrities() {
     Stream<QuerySnapshot> stream = _firestore
         .collection('celebrities')
-        .where('joinedDate',
-            isGreaterThanOrEqualTo: DateTime(DateTime.now().year, DateTime.now().month - 1))
+        .where(
+          'joinedDate',
+          isGreaterThanOrEqualTo: DateTime(DateTime.now().year, DateTime.now().month - 1),
+        )
         .snapshots();
 
     return _mapQuerySnapshotToCelebrities(stream);
